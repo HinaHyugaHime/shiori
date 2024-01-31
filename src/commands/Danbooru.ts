@@ -65,21 +65,21 @@ export default class Danbooru extends BaseCommand {
           ],
         });
       }
-      return interaction.followUp({
-        embeds: [
-          new EmbedBuilder()
-            .setColor('Red')
-            .setTitle('Uh oh')
-            .setDescription(
-              'Shiori ran into an error while trying to search for your image :/'
-            ),
-        ],
-      });
     } catch (err) {
       this.logger.error(
         err,
         `Shiori ran into an error while fetching images from Danbooru with tags: ${tags}`
       );
     }
+    return interaction.followUp({
+      embeds: [
+        new EmbedBuilder()
+          .setColor('Red')
+          .setTitle('Uh oh')
+          .setDescription(
+            'Shiori ran into an error while trying to search for your image :/'
+          ),
+      ],
+    });
   }
 }
