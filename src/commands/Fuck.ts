@@ -45,7 +45,8 @@ export default class Fuck extends BaseCommand {
           .setDescription('The user to fuck')
           .setRequired(true)
       )
-      .setDescription(this.description);
+      .setDescription(this.description)
+      .setNSFW(true);
   }
 
   public getHelpEmbed() {
