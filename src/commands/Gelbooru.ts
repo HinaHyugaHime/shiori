@@ -6,22 +6,22 @@ import {
 } from 'discord.js';
 import {Logger} from 'pino';
 
-import sankaku from '../lib/sankaku';
+import gelbooru from '../lib/gelbooru';
 import BaseCommand from '../structures/BaseCommand';
 import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
-export default class Sankaku extends BaseCommand {
+export default class Gelbooru extends BaseCommand {
   public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
       {
-        aliases: ['sank'],
+        aliases: [],
         cooldown: 1500,
-        description: 'Fetches an image with specific tags from sankaku',
+        description: 'Fetches an image with specific tags from gelbooru',
         hidden: false,
-        name: 'sankaku',
+        name: 'gelbooru',
         type: CommandType.NSFW,
       },
       logger
@@ -48,27 +48,30 @@ export default class Sankaku extends BaseCommand {
   }
 
   public async run(interaction: ChatInputCommandInteraction) {
-    const tags = interaction.options.getString('tags', false);
+    const tags = interaction.options.getString('tags', false) ?? '';
     await interaction.deferReply();
     try {
-      const {data} = await sankaku(this.shiori.sankakuAuthToken, tags ?? '');
-      const validImages = data.filter(x => x.file_type !== 'video/mp4');
-      const url = validImages[Math.floor(Math.random() * validImages.length)];
-      if (url) {
-        return interaction.followUp({
-          embeds: [
-            new EmbedBuilder()
-              .setColor('Blue')
-              .setImage(url.file_url ?? url.sample_url ?? url.preview_url)
-              .setURL(`https://sankaku.app/en/post/show/${url.id}`)
-              .setTitle(`Open in Sankaku`),
-          ],
-        });
-      }
+      const {post} = await gelbooru(tags);
+      const randomPost = post[Math.floor(Math.random() * post.length)];
+      return interaction.followUp({
+        embeds: [
+          new EmbedBuilder()
+            .setColor('Blue')
+            .setImage(
+              randomPost.file_url ??
+                randomPost.large_file_url ??
+                randomPost.preview_file_url
+            )
+            .setURL(
+              `https://gelbooru.com/index.php?page=post&s=view&id=${randomPost.id}`
+            )
+            .setTitle('Open in Gelbooru'),
+        ],
+      });
     } catch (err) {
       this.logger.error(
         err,
-        `Shiori ran into an error while fetching images from Sankaku with tags: ${tags}`
+        `Shiori ran into an error while fetching images from Gelbooru with tags: ${tags}`
       );
     }
     return interaction.followUp({

@@ -16,6 +16,7 @@ export default class GIFCommand extends BaseCommand {
   public fallbackGIFs: string[];
   public targetRequired: boolean;
   public targetRequiredMessage: string;
+
   public constructor(shiori: Shiori, data: IGIFCommandData, logger: Logger) {
     super(shiori, data, logger);
     this.contentGenerator = data.contentGenerator;

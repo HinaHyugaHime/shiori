@@ -1,4 +1,5 @@
 import {
+  AttachmentBuilder,
   ChatInputCommandInteraction,
   EmbedBuilder,
   SlashCommandBuilder,
@@ -6,22 +7,22 @@ import {
 } from 'discord.js';
 import {Logger} from 'pino';
 
-import danbooru from '../lib/danbooru';
+import nozomi from '../lib/nozomi';
 import BaseCommand from '../structures/BaseCommand';
 import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
-export default class Danbooru extends BaseCommand {
+export default class Nozomi extends BaseCommand {
   public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
       {
-        aliases: ['dan'],
+        aliases: [],
         cooldown: 1500,
-        description: 'Fetches an image with specific tags from danbooru',
+        description: 'Fetches an image with specific tags from nozomi',
         hidden: false,
-        name: 'danbooru',
+        name: 'nozomi',
         type: CommandType.NSFW,
       },
       logger
@@ -32,7 +33,7 @@ export default class Danbooru extends BaseCommand {
         option
           .setDescription('Tags describing your image')
           .setName('tags')
-          .setRequired(false)
+          .setRequired(true)
       )
       .setDescription(this.description)
       .setNSFW(true);
@@ -48,27 +49,26 @@ export default class Danbooru extends BaseCommand {
   }
 
   public async run(interaction: ChatInputCommandInteraction) {
-    const tags = interaction.options.getString('tags', false) ?? '';
+    const tags = interaction.options.getString('tags', true).split(' ')[0];
     await interaction.deferReply();
     try {
-      const {file_ext, file_url, id, large_file_url, preview_file_url} =
-        await danbooru(tags);
-      const url = file_url ?? large_file_url ?? preview_file_url;
-      if (url && file_ext !== 'mp4') {
+      const res = await nozomi(tags);
+      if (res) {
         return interaction.followUp({
           embeds: [
             new EmbedBuilder()
               .setColor('Blue')
-              .setImage(url)
-              .setURL(`https://danbooru.donmai.us/posts/${id}`)
-              .setTitle('Open in Donmai'),
+              .setImage('attachment://request.png')
+              .setURL(res.url)
+              .setTitle('Open in Nozomi'),
           ],
+          files: [new AttachmentBuilder(res.buffer).setName('request.png')],
         });
       }
     } catch (err) {
       this.logger.error(
         err,
-        `Shiori ran into an error while fetching images from Danbooru with tags: ${tags}`
+        `Shiori ran into an error while fetching images from Nozomi with tags: ${tags}`
       );
     }
     return interaction.followUp({

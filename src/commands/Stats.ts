@@ -9,6 +9,8 @@ import {Logger} from 'pino';
 import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 
+import isDebug from '../lib/isDebug';
+import isProd from '../lib/isProd';
 import BaseCommand from '../structures/BaseCommand';
 import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
@@ -33,9 +35,9 @@ export default class Stats extends BaseCommand {
       .setDescription(this.description);
   }
 
-  public getStatsEmbed(includeRoundtrip = true) {
+  public getStatsEmbed(config: string, includeRoundtrip = true) {
     const embed = new EmbedBuilder()
-      .setTitle("Shiori's Stats")
+      .setTitle(`[${config}] Shiori's Stats`)
       .setColor('Blue')
       .addFields([
         {
@@ -65,23 +67,33 @@ export default class Stats extends BaseCommand {
         },
       ]);
     if (includeRoundtrip) {
-      embed.addFields({
-        inline: true,
-        name: 'Roundtrip Latency:',
-        value: 'Calculating...',
-      });
+      embed.addFields([
+        {
+          inline: true,
+          name: 'Roundtrip Latency:',
+          value: 'Calculating...',
+        },
+      ]);
     }
     return embed;
   }
 
   public async run(interaction: ChatInputCommandInteraction) {
+    let config = isDebug ? 'DEBUG' : '';
+    if (!config && isProd) {
+      config = 'PROD';
+    } else if (config && isProd) {
+      config = 'DEBUG_PROD';
+    } else if (!config) {
+      config = 'DEVELOPMENT';
+    }
     const sent = await interaction.reply({
-      embeds: [this.getStatsEmbed()],
+      embeds: [this.getStatsEmbed(config)],
       fetchReply: true,
     });
     await interaction.editReply({
       embeds: [
-        this.getStatsEmbed(false).addFields({
+        this.getStatsEmbed(config, false).addFields({
           inline: true,
           name: 'Roundtrip Latency:',
           value: `${sent.createdTimestamp - interaction.createdTimestamp}ms`,

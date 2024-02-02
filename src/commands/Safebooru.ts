@@ -6,23 +6,23 @@ import {
 } from 'discord.js';
 import {Logger} from 'pino';
 
-import danbooru from '../lib/danbooru';
+import safebooru from '../lib/safebooru';
 import BaseCommand from '../structures/BaseCommand';
 import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
-export default class Danbooru extends BaseCommand {
+export default class Safebooru extends BaseCommand {
   public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
       {
-        aliases: ['dan'],
+        aliases: [],
         cooldown: 1500,
-        description: 'Fetches an image with specific tags from danbooru',
+        description: 'Fetches an image with specific tags from safebooru',
         hidden: false,
-        name: 'danbooru',
-        type: CommandType.NSFW,
+        name: 'safebooru',
+        type: CommandType.SFW,
       },
       logger
     );
@@ -51,24 +51,25 @@ export default class Danbooru extends BaseCommand {
     const tags = interaction.options.getString('tags', false) ?? '';
     await interaction.deferReply();
     try {
-      const {file_ext, file_url, id, large_file_url, preview_file_url} =
-        await danbooru(tags);
-      const url = file_url ?? large_file_url ?? preview_file_url;
-      if (url && file_ext !== 'mp4') {
-        return interaction.followUp({
-          embeds: [
-            new EmbedBuilder()
-              .setColor('Blue')
-              .setImage(url)
-              .setURL(`https://danbooru.donmai.us/posts/${id}`)
-              .setTitle('Open in Donmai'),
-          ],
-        });
-      }
+      const posts = await safebooru(tags);
+      const post = posts[Math.floor(Math.random() * posts.length)];
+      return interaction.followUp({
+        embeds: [
+          new EmbedBuilder()
+            .setColor('Blue')
+            .setImage(
+              `https://safebooru.org/images/${post.directory}/${post.image}`
+            )
+            .setURL(
+              `https://safebooru.org/index.php?page=post&s=view&id=${post.id}`
+            )
+            .setTitle('Open in Safebooru'),
+        ],
+      });
     } catch (err) {
       this.logger.error(
         err,
-        `Shiori ran into an error while fetching images from Danbooru with tags: ${tags}`
+        `Shiori ran into an error while fetching images from Safebooru with tags: ${tags}`
       );
     }
     return interaction.followUp({

@@ -71,6 +71,11 @@ shiori
   .then(() => logger.info('Successfully cached marriages'))
   .catch(err => logger.error(err, 'Error while caching marriages'));
 
+shiori
+  .cacheAFKUsers()
+  .then(() => logger.info('Successfully cached afk users'))
+  .catch(err => logger.error(err, 'Error while caching afk users'));
+
 await Promise.all(
   eventFiles.map(async file => {
     logger.info(`Loading event: ${file}`);

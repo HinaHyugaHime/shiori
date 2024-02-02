@@ -4,11 +4,13 @@ import request from './request';
 const authorization =
   'Basic ' +
   btoa(
-    `${Bun.env['SHIORI_DANBOORU_USERNAME']}:${Bun.env['SHIORI_DANBOORU_API_KEY']}`
+    `${Bun.env['SHIORI_AIBOORU_USERNAME']}:${Bun.env['SHIORI_AIBOORU_API_KEY']}`
   );
 
-export default async function danbooru(tags: string) {
-  const url = new URL('https://danbooru.donmai.us/posts/random.json');
+export default async function aibooru(tags: string, safe = false) {
+  const url = new URL(
+    `https://${safe ? 'safe.' : ''}aibooru.online/posts/random.json`
+  );
   url.searchParams.append('tags', tags);
   return request<IDanbooruSearchResponse>(url, {
     headers: {

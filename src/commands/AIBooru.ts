@@ -4,24 +4,25 @@ import {
   SlashCommandBuilder,
   inlineCode,
 } from 'discord.js';
+import {extname} from 'node:path';
 import {Logger} from 'pino';
 
-import danbooru from '../lib/danbooru';
+import aibooru from '../lib/aibooru';
 import BaseCommand from '../structures/BaseCommand';
 import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
-export default class Danbooru extends BaseCommand {
+export default class AIBooru extends BaseCommand {
   public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
       {
-        aliases: ['dan'],
+        aliases: [],
         cooldown: 1500,
-        description: 'Fetches an image with specific tags from danbooru',
+        description: 'Fetches an image with specific tags from aibooru',
         hidden: false,
-        name: 'danbooru',
+        name: 'aibooru',
         type: CommandType.NSFW,
       },
       logger
@@ -51,24 +52,31 @@ export default class Danbooru extends BaseCommand {
     const tags = interaction.options.getString('tags', false) ?? '';
     await interaction.deferReply();
     try {
-      const {file_ext, file_url, id, large_file_url, preview_file_url} =
-        await danbooru(tags);
-      const url = file_url ?? large_file_url ?? preview_file_url;
-      if (url && file_ext !== 'mp4') {
+      const {file_url, id, large_file_url, preview_file_url} =
+        await aibooru(tags);
+      let url = '';
+      if (extname(file_url) !== '.mp4') {
+        url = file_url;
+      } else if (extname(large_file_url) !== '.mp4') {
+        url = large_file_url;
+      } else if (extname(preview_file_url) !== '.mp4') {
+        url = preview_file_url;
+      }
+      if (url) {
         return interaction.followUp({
           embeds: [
             new EmbedBuilder()
               .setColor('Blue')
               .setImage(url)
-              .setURL(`https://danbooru.donmai.us/posts/${id}`)
-              .setTitle('Open in Donmai'),
+              .setURL(`https://aibooru.online/posts/${id}`)
+              .setTitle('Open in AIBooru'),
           ],
         });
       }
     } catch (err) {
       this.logger.error(
         err,
-        `Shiori ran into an error while fetching images from Danbooru with tags: ${tags}`
+        `Shiori ran into an error while fetching images from Aibooru with tags: ${tags}`
       );
     }
     return interaction.followUp({

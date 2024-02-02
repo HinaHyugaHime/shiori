@@ -3,7 +3,7 @@ import pretty from 'pino-pretty';
 
 import isProd from './isProd';
 
-const logtailToken = process.env['SHIORI_LOGTAIL_TOKEN'];
+const logtailToken = Bun.env['SHIORI_LOGTAIL_TOKEN'];
 
 export default pino(
   isProd && logtailToken

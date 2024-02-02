@@ -6,22 +6,22 @@ import {
 } from 'discord.js';
 import {Logger} from 'pino';
 
-import danbooru from '../lib/danbooru';
+import pivix from '../lib/pivix';
 import BaseCommand from '../structures/BaseCommand';
 import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
-export default class Danbooru extends BaseCommand {
+export default class Pivix extends BaseCommand {
   public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
       {
-        aliases: ['dan'],
+        aliases: [],
         cooldown: 1500,
-        description: 'Fetches an image with specific tags from danbooru',
+        description: 'Fetches an image with specific tags from pivix',
         hidden: false,
-        name: 'danbooru',
+        name: 'pivix',
         type: CommandType.NSFW,
       },
       logger
@@ -51,24 +51,22 @@ export default class Danbooru extends BaseCommand {
     const tags = interaction.options.getString('tags', false) ?? '';
     await interaction.deferReply();
     try {
-      const {file_ext, file_url, id, large_file_url, preview_file_url} =
-        await danbooru(tags);
-      const url = file_url ?? large_file_url ?? preview_file_url;
-      if (url && file_ext !== 'mp4') {
+      const res = await pivix(tags);
+      if (res?.url) {
         return interaction.followUp({
           embeds: [
             new EmbedBuilder()
               .setColor('Blue')
-              .setImage(url)
-              .setURL(`https://danbooru.donmai.us/posts/${id}`)
-              .setTitle('Open in Donmai'),
+              .setImage(res.url)
+              .setURL(`https://pixiv.pics/artworks/${res.id}`)
+              .setTitle('Open in Pivix'),
           ],
         });
       }
     } catch (err) {
       this.logger.error(
         err,
-        `Shiori ran into an error while fetching images from Danbooru with tags: ${tags}`
+        `Shiori ran into an error while fetching images from Pivix with tags: ${tags}`
       );
     }
     return interaction.followUp({

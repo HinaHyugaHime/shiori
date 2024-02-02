@@ -8,15 +8,21 @@ import {
   PresenceUpdateStatus,
 } from 'discord.js';
 
+import AFK from '../models/AFK';
 import Marriage from '../models/Marriage';
-import {AliasCollection, CommandCollection, MarriageCollection} from '../types';
+import {
+  AFKCollection,
+  AliasCollection,
+  CommandCollection,
+  MarriageCollection,
+} from '../types';
 import BaseCommand from './BaseCommand';
 
 export default class Shiori extends Client {
+  public afkUsers: AFKCollection = new Collection();
   public aliases: AliasCollection = new Collection();
   public commands: CommandCollection = new Collection();
   public marriages: MarriageCollection = new Collection();
-  public sankakuAuthToken: string;
 
   public constructor() {
     super({
@@ -38,7 +44,15 @@ export default class Shiori extends Client {
         status: PresenceUpdateStatus.Online,
       },
     });
-    this.sankakuAuthToken = '';
+  }
+
+  public async cacheAFKUsers() {
+    const afkUsers = await AFK.find({
+      deleted: false,
+    });
+    afkUsers.forEach(user => {
+      this.afkUsers.set(user.user, user);
+    });
   }
 
   public async cacheMarriages() {

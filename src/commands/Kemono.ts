@@ -6,23 +6,23 @@ import {
 } from 'discord.js';
 import {Logger} from 'pino';
 
-import danbooru from '../lib/danbooru';
+import kemono from '../lib/kemono';
 import BaseCommand from '../structures/BaseCommand';
 import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
-export default class Danbooru extends BaseCommand {
+export default class Kemono extends BaseCommand {
   public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
       {
-        aliases: ['dan'],
+        aliases: [],
         cooldown: 1500,
-        description: 'Fetches an image with specific tags from danbooru',
+        description: 'Fetches an image with specific tags from kemono',
         hidden: false,
-        name: 'danbooru',
-        type: CommandType.NSFW,
+        name: 'kemono',
+        type: CommandType.SFW,
       },
       logger
     );
@@ -51,24 +51,25 @@ export default class Danbooru extends BaseCommand {
     const tags = interaction.options.getString('tags', false) ?? '';
     await interaction.deferReply();
     try {
-      const {file_ext, file_url, id, large_file_url, preview_file_url} =
-        await danbooru(tags);
-      const url = file_url ?? large_file_url ?? preview_file_url;
-      if (url && file_ext !== 'mp4') {
-        return interaction.followUp({
-          embeds: [
-            new EmbedBuilder()
-              .setColor('Blue')
-              .setImage(url)
-              .setURL(`https://danbooru.donmai.us/posts/${id}`)
-              .setTitle('Open in Donmai'),
-          ],
-        });
-      }
+      const posts = await kemono(tags).then(res =>
+        res.filter(x => x.file.path)
+      );
+      const post = posts[Math.floor(Math.random() * posts.length)];
+      return interaction.followUp({
+        embeds: [
+          new EmbedBuilder()
+            .setColor('Blue')
+            .setImage(`https://kemono.su${post.file.path}`)
+            .setURL(
+              `https://kemono.su/${post.service}/user/${post.user}/post/${post.id}`
+            )
+            .setTitle('Open in Kemono'),
+        ],
+      });
     } catch (err) {
       this.logger.error(
         err,
-        `Shiori ran into an error while fetching images from Danbooru with tags: ${tags}`
+        `Shiori ran into an error while fetching images from Kemono with tags: ${tags}`
       );
     }
     return interaction.followUp({

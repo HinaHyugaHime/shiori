@@ -6,23 +6,24 @@ import {
 } from 'discord.js';
 import {Logger} from 'pino';
 
-import danbooru from '../lib/danbooru';
+import aibooru from '../lib/aibooru';
 import BaseCommand from '../structures/BaseCommand';
 import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
-export default class Danbooru extends BaseCommand {
+export default class AIBooruSafe extends BaseCommand {
   public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
       {
-        aliases: ['dan'],
+        aliases: ['s-aibooru'],
         cooldown: 1500,
-        description: 'Fetches an image with specific tags from danbooru',
+        description:
+          'Fetches an image with specific tags from aibooru (safe/sfw)',
         hidden: false,
-        name: 'danbooru',
-        type: CommandType.NSFW,
+        name: 'aibooru-safe',
+        type: CommandType.SFW,
       },
       logger
     );
@@ -52,7 +53,7 @@ export default class Danbooru extends BaseCommand {
     await interaction.deferReply();
     try {
       const {file_ext, file_url, id, large_file_url, preview_file_url} =
-        await danbooru(tags);
+        await aibooru(tags, true);
       const url = file_url ?? large_file_url ?? preview_file_url;
       if (url && file_ext !== 'mp4') {
         return interaction.followUp({
@@ -60,15 +61,15 @@ export default class Danbooru extends BaseCommand {
             new EmbedBuilder()
               .setColor('Blue')
               .setImage(url)
-              .setURL(`https://danbooru.donmai.us/posts/${id}`)
-              .setTitle('Open in Donmai'),
+              .setURL(`https://safe.aibooru.online/posts/${id}`)
+              .setTitle('Open in AIBooru'),
           ],
         });
       }
     } catch (err) {
       this.logger.error(
         err,
-        `Shiori ran into an error while fetching images from Danbooru with tags: ${tags}`
+        `Shiori ran into an error while fetching images from Aibooru with tags: ${tags}`
       );
     }
     return interaction.followUp({

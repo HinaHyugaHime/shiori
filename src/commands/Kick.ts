@@ -16,7 +16,7 @@ export default class Kick extends WaifuCommand {
         endpoint: 'sfw/kick',
         fallbackGIFs: [],
         hidden: false,
-        name: 'kick',
+        name: 'akick',
         targetRequired: true,
         targetRequiredMessage: 'The user to kick',
         type: CommandType.SFW,
