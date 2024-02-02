@@ -1,3 +1,5 @@
-const isProd = Bun.env['NODE_ENV'] === 'production';
+import isDebug from './isDebug';
+
+const isProd = !isDebug;
 
 export default isProd;
