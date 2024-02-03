@@ -11,6 +11,12 @@ export default class ClientReady extends BaseEvent {
 
   public async run() {
     this.logger.info('Shiori is ready!');
+    if (Bun.env['SHIORI_MOMMY_ID']) {
+      await this.shiori.users.fetch(Bun.env['SHIORI_MOMMY_ID'], {
+        cache: true,
+        force: true,
+      });
+    }
     this.logger.info(`Logged in as ${this.shiori.user!.tag}!`);
   }
 }
