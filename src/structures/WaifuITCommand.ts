@@ -1,20 +1,22 @@
 import {Logger} from 'pino';
 
 import request from '../lib/request';
-import {IWaifuCommandData, IWaifuResponse} from '../types';
-import GIFCommand from './GIFCommand';
+import {IWaifuCommandData, IWaifuITResponse} from '../types';
 import Shiori from './Shiori';
+import WaifuCommand from './WaifuCommand';
 
-export default class WaifuCommand extends GIFCommand {
-  public url: string;
+export default class WaifuITCommand extends WaifuCommand {
   public constructor(shiori: Shiori, data: IWaifuCommandData, logger: Logger) {
     super(shiori, data, logger);
-    this.fallbackGIFs = data.fallbackGIFs;
-    this.url = `https://api.waifu.pics/${data.endpoint}`;
+    this.url = `https://waifu.it/api/v4/${data.endpoint}`;
   }
 
   public async getEmbedUrl() {
-    const {url} = await request<IWaifuResponse>(this.url).catch(e => {
+    const {url} = await request<IWaifuITResponse>(this.url, {
+      headers: {
+        Authorization: `${Bun.env['SHIORI_WAIFU_IT_API_KEY']}`,
+      },
+    }).catch(e => {
       this.logger.error(
         e,
         `Shiori ran into an error while fetching an image from endpoint: ${this.url}:`
@@ -25,6 +27,6 @@ export default class WaifuCommand extends GIFCommand {
         ],
       };
     });
-    return url;
+    return url.endsWith('.gif') ? url : `${url}.gif`;
   }
 }

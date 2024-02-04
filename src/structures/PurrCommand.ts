@@ -1,30 +1,28 @@
 import {Logger} from 'pino';
 
 import request from '../lib/request';
-import {IWaifuCommandData, IWaifuResponse} from '../types';
-import GIFCommand from './GIFCommand';
+import {IPurrResponse, IWaifuCommandData} from '../types';
 import Shiori from './Shiori';
+import WaifuCommand from './WaifuCommand';
 
-export default class WaifuCommand extends GIFCommand {
-  public url: string;
+export default class PurrCommand extends WaifuCommand {
   public constructor(shiori: Shiori, data: IWaifuCommandData, logger: Logger) {
     super(shiori, data, logger);
-    this.fallbackGIFs = data.fallbackGIFs;
-    this.url = `https://api.waifu.pics/${data.endpoint}`;
+    this.url = `https://purrbot.site/api/${data.endpoint}`;
   }
 
   public async getEmbedUrl() {
-    const {url} = await request<IWaifuResponse>(this.url).catch(e => {
+    const {link} = await request<IPurrResponse>(this.url).catch(e => {
       this.logger.error(
         e,
         `Shiori ran into an error while fetching an image from endpoint: ${this.url}:`
       );
       return {
-        url: this.fallbackGIFs[
+        link: this.fallbackGIFs[
           Math.floor(Math.random() * this.fallbackGIFs.length)
         ],
       };
     });
-    return url;
+    return link;
   }
 }

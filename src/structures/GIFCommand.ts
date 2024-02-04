@@ -57,9 +57,10 @@ export default class GIFCommand extends BaseCommand {
 
   public async run(interaction: ChatInputCommandInteraction) {
     const targetUser = interaction.options.getUser('user', this.targetRequired);
+    await interaction.deferReply();
     const url = await this.getEmbedUrl();
     if (!url) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor('Red')
@@ -68,7 +69,7 @@ export default class GIFCommand extends BaseCommand {
         ],
       });
     }
-    await interaction.reply({
+    await interaction.editReply({
       content: this.contentGenerator(
         userMention(interaction.user.id),
         targetUser?.id ? userMention(targetUser.id) : ''

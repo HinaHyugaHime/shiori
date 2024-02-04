@@ -10,12 +10,14 @@ import {
 } from 'discord.js';
 import {Logger} from 'pino';
 
+import request from '../lib/request';
 import BaseCommand from '../structures/BaseCommand';
 import Shiori from '../structures/Shiori';
-import {CommandType} from '../types';
+import {CommandType, IPurrResponse} from '../types';
 
 export default class Fuck extends BaseCommand {
-  private fallbackGIFs: string[];
+  public fallbackGIFs: string[];
+  public url: string;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
@@ -41,6 +43,22 @@ export default class Fuck extends BaseCommand {
         .setDescription('The user to fuck')
         .setRequired(true)
     );
+    this.url = 'https://purrbot.site/api/img/nsfw/fuck/gif';
+  }
+
+  public async getEmbedUrl() {
+    const {link} = await request<IPurrResponse>(this.url).catch(e => {
+      this.logger.error(
+        e,
+        `Shiori ran into an error while fetching an image from endpoint: ${this.url}:`
+      );
+      return {
+        link: this.fallbackGIFs[
+          Math.floor(Math.random() * this.fallbackGIFs.length)
+        ],
+      };
+    });
+    return link;
   }
 
   public getHelpEmbed() {
@@ -107,10 +125,7 @@ export default class Fuck extends BaseCommand {
         time: 30000,
       });
       if (confirmation.customId === 'accept') {
-        const url =
-          this.fallbackGIFs[
-            Math.floor(Math.random() * this.fallbackGIFs.length)
-          ];
+        const url = await this.getEmbedUrl();
         await confirmation.update({
           components: [],
           content: `${userMention(user)} fucked ${userMention(partner.id)}, that's hot ngl...`,

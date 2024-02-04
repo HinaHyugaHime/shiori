@@ -80,6 +80,15 @@ try {
     );
   } else {
     await rest.put(
+      Routes.applicationGuildCommands(
+        `${process.env['SHIORI_BOT_CLIENT_ID']}`,
+        `${process.env['SHIORI_DEBUG_GUILD_ID']}`
+      ),
+      {
+        body: [],
+      }
+    );
+    await rest.put(
       Routes.applicationCommands(`${process.env['SHIORI_BOT_CLIENT_ID']}`),
       {
         body: commands,

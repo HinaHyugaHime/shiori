@@ -204,3 +204,88 @@ export interface IPivixPost {
 export interface IPivixResponse {
   illusts: IPivixPost[];
 }
+
+export interface IWaifuITResponse {
+  url: string;
+}
+
+export interface IWaifuIMImage {
+  artist: null | string;
+  byte_size: number;
+  dominant_color: string;
+  extension: string;
+  favorites: number;
+  height: number;
+  image_id: number;
+  is_nsfw: boolean;
+  liked_at: null;
+  preview_url: string;
+  signature: string;
+  source: string;
+  tags: {
+    description: string;
+    is_nsfw: boolean;
+    name: string;
+    tag_id: number;
+  }[];
+  uploaded_at: string;
+  url: string;
+  width: number;
+}
+
+export interface IWaifuIMResponse {
+  images: IWaifuIMImage[];
+}
+
+export interface IPurrResponse {
+  error: boolean;
+  link: string;
+  time: number;
+}
+
+export interface IMoebooruSearchResponse {
+  actual_preview_height: number;
+  actual_preview_width: number;
+  author: string;
+  change: number;
+  created_at: number;
+  creator_id: number;
+  file_size: number;
+  file_url: string;
+  frames: unknown[];
+  frames_pending: unknown[];
+  frames_pending_string: string;
+  frames_string: string;
+  has_children: boolean;
+  height: number;
+  id: number;
+  is_held: boolean;
+  is_shown_in_index: boolean;
+  jpeg_file_size: number;
+  jpeg_height: number;
+  jpeg_url: string;
+  jpeg_width: number;
+  md5: string;
+  parent_id: null | string;
+  preview_height: number;
+  preview_url: string;
+  preview_width: number;
+  rating: string;
+  sample_file_size: number;
+  sample_height: number;
+  sample_url: string;
+  sample_width: number;
+  score: number;
+  source: string;
+  status: string;
+  tags: string;
+  width: number;
+}
+
+export interface INightAPIResponse {
+  content: {
+    id: number;
+    url: string;
+  };
+  status: number;
+}
