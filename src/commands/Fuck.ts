@@ -5,7 +5,6 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
   EmbedBuilder,
-  SlashCommandBuilder,
   inlineCode,
   userMention,
 } from 'discord.js';
@@ -17,7 +16,6 @@ import {CommandType} from '../types';
 
 export default class Fuck extends BaseCommand {
   private fallbackGIFs: string[];
-  public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
@@ -37,16 +35,12 @@ export default class Fuck extends BaseCommand {
       'https://c.tenor.com/cVRLCEed9hwAAAAC/moan-anime.gif',
       'https://c.tenor.com/NG4_VAKWTc8AAAAd/anime-blush.gif',
     ];
-    this.slashCommandData = new SlashCommandBuilder()
-      .setName(this.name)
-      .addUserOption(option =>
-        option
-          .setName('partner')
-          .setDescription('The user to fuck')
-          .setRequired(true)
-      )
-      .setDescription(this.description)
-      .setNSFW(true);
+    this.slashCommandData.addUserOption(option =>
+      option
+        .setName('partner')
+        .setDescription('The user to fuck')
+        .setRequired(true)
+    );
   }
 
   public getHelpEmbed() {

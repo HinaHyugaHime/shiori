@@ -2,7 +2,6 @@ import {
   ChannelType,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  SlashCommandBuilder,
   inlineCode,
 } from 'discord.js';
 import {Logger} from 'pino';
@@ -13,7 +12,6 @@ import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
 export default class Help extends BaseCommand {
-  public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
@@ -27,15 +25,12 @@ export default class Help extends BaseCommand {
       },
       logger
     );
-    this.slashCommandData = new SlashCommandBuilder()
-      .setName(this.name)
-      .addStringOption(option =>
-        option
-          .setDescription('The command to get help for')
-          .setName('command')
-          .setRequired(false)
-      )
-      .setDescription(this.description);
+    this.slashCommandData.addStringOption(option =>
+      option
+        .setDescription('The command to get help for')
+        .setName('command')
+        .setRequired(false)
+    );
   }
 
   public getHelpEmbed(includeNSFW = false) {

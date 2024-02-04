@@ -2,7 +2,6 @@ import {
   AttachmentBuilder,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  SlashCommandBuilder,
   inlineCode,
 } from 'discord.js';
 import {Logger} from 'pino';
@@ -13,7 +12,6 @@ import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
 export default class Nozomi extends BaseCommand {
-  public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
@@ -27,16 +25,12 @@ export default class Nozomi extends BaseCommand {
       },
       logger
     );
-    this.slashCommandData = new SlashCommandBuilder()
-      .setName(this.name)
-      .addStringOption(option =>
-        option
-          .setDescription('Tags describing your image')
-          .setName('tags')
-          .setRequired(true)
-      )
-      .setDescription(this.description)
-      .setNSFW(true);
+    this.slashCommandData.addStringOption(option =>
+      option
+        .setDescription('Tags describing your image')
+        .setName('tags')
+        .setRequired(true)
+    );
   }
 
   public getHelpEmbed() {

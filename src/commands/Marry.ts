@@ -5,7 +5,6 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
   EmbedBuilder,
-  SlashCommandBuilder,
   inlineCode,
   userMention,
 } from 'discord.js';
@@ -17,7 +16,6 @@ import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
 export default class Marry extends BaseCommand {
-  public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
@@ -31,15 +29,12 @@ export default class Marry extends BaseCommand {
       },
       logger
     );
-    this.slashCommandData = new SlashCommandBuilder()
-      .setName(this.name)
-      .addUserOption(option =>
-        option
-          .setName('partner')
-          .setDescription('The user to marry')
-          .setRequired(true)
-      )
-      .setDescription(this.description);
+    this.slashCommandData.addUserOption(option =>
+      option
+        .setName('partner')
+        .setDescription('The user to marry')
+        .setRequired(true)
+    );
   }
 
   public getHelpEmbed() {
@@ -128,8 +123,14 @@ export default class Marry extends BaseCommand {
         });
         const marriage = new Marriage([user, partner.id]);
         await marriage.save();
-        this.shiori.marriages.set(user, {...marriage, partner: partner.id});
-        this.shiori.marriages.set(partner.id, {...marriage, partner: user});
+        this.shiori.marriages.set(user, {
+          ...marriage.toJSON(),
+          partner: partner.id,
+        });
+        this.shiori.marriages.set(partner.id, {
+          ...marriage.toJSON(),
+          partner: user,
+        });
       } else if (confirmation.customId === 'decline') {
         await confirmation.update({
           components: [],

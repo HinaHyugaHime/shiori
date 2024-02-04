@@ -1,9 +1,4 @@
-import {
-  ChatInputCommandInteraction,
-  SlashCommandBuilder,
-  inlineCode,
-  userMention,
-} from 'discord.js';
+import {ChatInputCommandInteraction, inlineCode, userMention} from 'discord.js';
 import {Logger} from 'pino';
 
 import BaseCommand from '../structures/BaseCommand';
@@ -11,7 +6,6 @@ import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
 export default class Partner extends BaseCommand {
-  public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
@@ -25,15 +19,12 @@ export default class Partner extends BaseCommand {
       },
       logger
     );
-    this.slashCommandData = new SlashCommandBuilder()
-      .setName(this.name)
-      .addUserOption(option =>
-        option
-          .setName('user')
-          .setDescription('The user to find partner of')
-          .setRequired(false)
-      )
-      .setDescription(this.description);
+    this.slashCommandData.addUserOption(option =>
+      option
+        .setName('user')
+        .setDescription('The user to find partner of')
+        .setRequired(false)
+    );
   }
 
   public getHelpEmbed() {

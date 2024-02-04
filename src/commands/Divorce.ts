@@ -5,7 +5,6 @@ import {
   ChatInputCommandInteraction,
   ComponentType,
   EmbedBuilder,
-  SlashCommandBuilder,
   userMention,
 } from 'discord.js';
 import {Logger} from 'pino';
@@ -16,7 +15,6 @@ import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
 export default class Divorce extends BaseCommand {
-  public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
@@ -30,9 +28,6 @@ export default class Divorce extends BaseCommand {
       },
       logger
     );
-    this.slashCommandData = new SlashCommandBuilder()
-      .setName(this.name)
-      .setDescription(this.description);
   }
 
   public async run(interaction: ChatInputCommandInteraction) {

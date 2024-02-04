@@ -1,9 +1,4 @@
-import {
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  SlashCommandBuilder,
-  version,
-} from 'discord.js';
+import {ChatInputCommandInteraction, EmbedBuilder, version} from 'discord.js';
 import {cpus} from 'node:os';
 import {Logger} from 'pino';
 import prettyBytes from 'pretty-bytes';
@@ -14,7 +9,6 @@ import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
 export default class Stats extends BaseCommand {
-  public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
@@ -28,14 +22,11 @@ export default class Stats extends BaseCommand {
       },
       logger
     );
-    this.slashCommandData = new SlashCommandBuilder()
-      .setName(this.name)
-      .setDescription(this.description);
   }
 
   public getStatsEmbed(includeRoundtrip = true) {
     const embed = new EmbedBuilder()
-      .setTitle(`Shiori's Stats`)
+      .setTitle("Shiori's Stats")
       .setColor('Blue')
       .addFields([
         {

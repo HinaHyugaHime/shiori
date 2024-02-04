@@ -1,8 +1,4 @@
-import {
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  SlashCommandBuilder,
-} from 'discord.js';
+import {ChatInputCommandInteraction, EmbedBuilder} from 'discord.js';
 import {Logger} from 'pino';
 
 import AFKModel from '../models/AFK';
@@ -11,7 +7,6 @@ import Shiori from '../structures/Shiori';
 import {CommandType} from '../types';
 
 export default class AFK extends BaseCommand {
-  public slashCommandData: SlashCommandBuilder;
   public constructor(shiori: Shiori, logger: Logger) {
     super(
       shiori,
@@ -25,16 +20,13 @@ export default class AFK extends BaseCommand {
       },
       logger
     );
-    this.slashCommandData = new SlashCommandBuilder()
-      .setName(this.name)
-      .addStringOption(option =>
-        option
-          .setDescription('Message to respond with on ping')
-          .setName('message')
-          .setRequired(false)
-          .setMaxLength(1600)
-      )
-      .setDescription(this.description);
+    this.slashCommandData.addStringOption(option =>
+      option
+        .setDescription('Message to respond with on ping')
+        .setName('message')
+        .setRequired(false)
+        .setMaxLength(1600)
+    );
   }
 
   public async run(interaction: ChatInputCommandInteraction) {
