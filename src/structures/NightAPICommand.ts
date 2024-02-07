@@ -1,7 +1,7 @@
 import {Logger} from 'pino';
 
 import request from '../lib/request';
-import {IWaifuCommandData, IWaifuIMResponse} from '../types';
+import {INightAPIResponse, IWaifuCommandData} from '../types';
 import Shiori from './Shiori';
 import WaifuCommand from './WaifuCommand';
 
@@ -12,7 +12,7 @@ export default class NightAPICommand extends WaifuCommand {
   }
 
   public async getEmbedUrl() {
-    const {images} = await request<IWaifuIMResponse>(this.url, {
+    const {content} = await request<INightAPIResponse>(this.url, {
       headers: {
         Authorization: `${Bun.env['SHIORI_NIGHT_API_KEY']}`,
       },
@@ -22,16 +22,13 @@ export default class NightAPICommand extends WaifuCommand {
         `Shiori ran into an error while fetching an image from endpoint: ${this.url}:`
       );
       return {
-        images: [
-          {
-            url: this.fallbackGIFs[
-              Math.floor(Math.random() * this.fallbackGIFs.length)
-            ],
-          },
-        ],
+        content: {
+          url: this.fallbackGIFs[
+            Math.floor(Math.random() * this.fallbackGIFs.length)
+          ],
+        },
       };
     });
-    const {url} = images[Math.floor(Math.random() * images.length)];
-    return url;
+    return content.url;
   }
 }
