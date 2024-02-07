@@ -9,7 +9,7 @@ export default class Handhold extends WaifuCommand {
     super(
       shiori,
       {
-        aliases: ['hh'],
+        aliases: [],
         contentGenerator: (user, targetUser) =>
           `${user} is holding hands with ${targetUser}!`,
         cooldown: 1500,

@@ -12,7 +12,7 @@ export default class Wag extends GIFCommand {
         aliases: [],
         contentGenerator: user => `${user} is wagging!`,
         cooldown: 1500,
-        description: '...?',
+        description: 'wag your tail in excitement!~',
         fallbackGIFs: [
           'https://media1.tenor.com/m/_SHZ8ZyLYL8AAAAC/flirty-flirt.gif',
           'https://media1.tenor.com/m/2oDLBdF_e9oAAAAC/nyhzumi-nyh.gif',

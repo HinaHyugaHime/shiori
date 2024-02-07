@@ -9,14 +9,14 @@ export default class WaifuNSFW extends WaifuCommand {
     super(
       shiori,
       {
-        aliases: ['w-nsfw', 'waif-nsfw'],
+        aliases: [],
         contentGenerator: user => `Here's a waifu for you, ${user}!`,
         cooldown: 1500,
         description: 'Shows a random waifu (nsfw) image',
         endpoint: 'nsfw/waifu',
         fallbackGIFs: [],
         hidden: false,
-        name: 'waifu-nsfw',
+        name: 'w-nsfw',
         targetRequired: false,
         targetRequiredMessage: '',
         type: CommandType.NSFW,

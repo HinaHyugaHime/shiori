@@ -9,14 +9,14 @@ export default class NekoNSFW extends WaifuCommand {
     super(
       shiori,
       {
-        aliases: ['n-nsfw'],
+        aliases: [],
         contentGenerator: user => `Here's a neko for you, ${user}!`,
         cooldown: 1500,
         description: 'Shows a random neko (nsfw) image',
         endpoint: 'nsfw/neko',
         fallbackGIFs: [],
         hidden: false,
-        name: 'neko-nsfw',
+        name: 'n-nsfw',
         targetRequired: false,
         targetRequiredMessage: '',
         type: CommandType.NSFW,

@@ -9,7 +9,7 @@ export default class NekoNSFW extends WaifuCommand {
     super(
       shiori,
       {
-        aliases: ['bj'],
+        aliases: [],
         contentGenerator: (user, targetUser) =>
           `${user} is giving ${targetUser} a blowjob`,
         cooldown: 1500,
@@ -17,7 +17,7 @@ export default class NekoNSFW extends WaifuCommand {
         endpoint: 'nsfw/blowjob',
         fallbackGIFs: [],
         hidden: false,
-        name: 'blowjob',
+        name: 'bj',
         targetRequired: true,
         targetRequiredMessage: 'The user to blow off',
         type: CommandType.NSFW,

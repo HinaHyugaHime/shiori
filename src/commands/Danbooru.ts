@@ -15,7 +15,7 @@ export default class Danbooru extends BaseCommand {
     super(
       shiori,
       {
-        aliases: ['dan'],
+        aliases: [],
         cooldown: 1500,
         description: 'Fetches an image with specific tags from danbooru',
         hidden: false,

@@ -25,7 +25,7 @@ export default class AFK extends BaseCommand {
         .setDescription('Message to respond with on ping')
         .setName('message')
         .setRequired(false)
-        .setMaxLength(1600)
+        .setMaxLength(256)
     );
   }
 

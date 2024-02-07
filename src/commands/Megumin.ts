@@ -9,14 +9,14 @@ export default class Megumin extends WaifuCommand {
     super(
       shiori,
       {
-        aliases: ['megu'],
+        aliases: [],
         contentGenerator: user => `Here's a megumin for you, ${user}!`,
         cooldown: 1500,
         description: 'Shows a random megumin image',
         endpoint: 'sfw/megumin',
         fallbackGIFs: [],
         hidden: false,
-        name: 'megumin',
+        name: 'megu',
         targetRequired: false,
         targetRequiredMessage: '',
         type: CommandType.SFW,

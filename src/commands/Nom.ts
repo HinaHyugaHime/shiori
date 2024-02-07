@@ -13,7 +13,7 @@ export default class Nom extends WaifuCommand {
         contentGenerator: (user, targetUser) =>
           `${user} thinks ${targetUser} is food!`,
         cooldown: 1500,
-        description: '...?',
+        description: 'nom someone!~',
         endpoint: 'sfw/nom',
         fallbackGIFs: [],
         hidden: false,

@@ -15,7 +15,7 @@ export default class AIBooruSafe extends BaseCommand {
     super(
       shiori,
       {
-        aliases: ['s-aibooru'],
+        aliases: [],
         cooldown: 1500,
         description:
           'Fetches an image with specific tags from aibooru (safe/sfw)',
