@@ -10,8 +10,7 @@
     "pretty-bytes": "6.1.1",
     "pretty-ms": "9.0.0",
     "sharp": "0.33.2",
-    "utf-8-validate": "6.0.3",
-    "zlib-sync": "0.1.9"
+    "utf-8-validate": "6.0.3"
   },
   "devDependencies": {
     "@types/bun": "1.0.5",
