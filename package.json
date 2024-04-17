@@ -12,7 +12,7 @@
     "sharp": "0.33.2",
     "utf-8-validate": "6.0.3",
     "zlib-sync": "0.1.9",
-    "python3": "3.12",
+    "python3": "latest",
     "npm": "10.5.2"
   },
   "devDependencies": {
