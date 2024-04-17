@@ -4,11 +4,11 @@ WORKDIR /usr/src/app
 FROM base AS install
 WORKDIR /temp/dev
 COPY package.json bun.lockb /temp/dev/
-RUN bun install --frozen-lockfile
+RUN bun install 
 
 WORKDIR /temp/prod
 COPY package.json bun.lockb /temp/prod/
-RUN bun install --frozen-lockfile --production
+RUN bun install --production
 
 FROM base AS prerelease
 WORKDIR /usr/src/app
