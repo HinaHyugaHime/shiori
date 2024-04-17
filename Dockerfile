@@ -8,7 +8,7 @@ RUN bun install
 
 WORKDIR /temp/prod
 COPY package.json bun.lockb /temp/prod/
-RUN bun install --production
+RUN bun install
 
 FROM base AS prerelease
 WORKDIR /usr/src/app
