@@ -151,60 +151,6 @@ export interface IKemonoPost {
   user: string;
 }
 
-export interface IPivixImageUrls {
-  large: string;
-  medium: string;
-  square_medium: string;
-}
-
-export interface IPivixOriginalImageUrls extends IPivixImageUrls {
-  original: string;
-}
-
-export interface IPivixPost {
-  caption: string;
-  create_date: string;
-  height: number;
-  id: number;
-  illust_ai_type: number;
-  illust_book_style: number;
-  image_urls: IPivixImageUrls;
-  is_bookmarked: boolean;
-  is_muted: boolean;
-  meta_pages: {
-    image_urls: IPivixOriginalImageUrls;
-  }[];
-  meta_single_page: {
-    original_image_url?: string;
-  };
-  page_count: number;
-  restrict: number;
-  sanity_level: number;
-  tags: {
-    name: string;
-    translated_name?: string;
-  }[];
-  title: string;
-  tools: [];
-  total_bookmarks: number;
-  total_view: number;
-  type: string;
-  user: {
-    account: string;
-    id: number;
-    is_followed: boolean;
-    name: string;
-    profile_image_urls: Partial<IPivixOriginalImageUrls>;
-  };
-  visible: boolean;
-  width: number;
-  x_restrict: number;
-}
-
-export interface IPivixResponse {
-  illusts: IPivixPost[];
-}
-
 export interface IWaifuITResponse {
   url: string;
 }

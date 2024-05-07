@@ -20,7 +20,7 @@ export default class Kemono extends BaseCommand {
         description: 'Fetches an image with specific tags from kemono',
         hidden: false,
         name: 'kemono',
-        type: CommandType.SFW,
+        type: CommandType.NSFW,
       },
       logger
     );
